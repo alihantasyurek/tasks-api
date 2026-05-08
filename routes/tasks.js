@@ -9,46 +9,6 @@ const mongoose = require("mongoose");
 /**
  * @swagger
  * /tasks:
- *   post:
- *     summary: Create a new task
- *     description: Creates a task for the authenticated user.
- *     tags:
- *       - Tasks
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       201:
- *         description: Task created successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Task'
- *       400:
- *         description: Invalid request data
- *       401:
- *         description: Missing or invalid token
- *       500:
- *         description: Server Error
- */
-
-router.post("/", auth, taskValidation, async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-  const { title, description, completed } = req.body;
-  try {
-    const task = new Task({ title, description, completed, user: req.user.id });
-    await task.save();
-    return res.status(201).json(task);
-  } catch (err) {
-    return res.status(500).json({ errors: [{ msg: "Server Error" }] });
-  }
-});
-
-/**
- * @swagger
- * /tasks:
  *   get:
  *     summary: Get all user tasks
  *     description: Returns all tasks belonging to the authenticated user.
@@ -137,59 +97,39 @@ router.get("/:id", auth, async (req, res) => {
 
 /**
  * @swagger
- * /tasks/{id}:
- *   delete:
- *     summary: Delete task by ID
- *     description: Deletes a task belonging to the authenticated user.
+ * /tasks:
+ *   post:
+ *     summary: Create a new task
+ *     description: Creates a task for the authenticated user.
  *     tags:
  *       - Tasks
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: Task ID
  *     responses:
- *       200:
- *         description: Task deleted successfully
+ *       201:
+ *         description: Task created successfully
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 msg:
- *                   type: string
- *                   example: Task deleted successfully
+ *               $ref: '#/components/schemas/Task'
  *       400:
- *         description: Invalid task ID
+ *         description: Invalid request data
  *       401:
  *         description: Missing or invalid token
- *       404:
- *         description: Task not found
  *       500:
  *         description: Server Error
  */
 
-router.delete("/:id", auth, async (req, res) => {
+router.post("/", auth, taskValidation, async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+  const { title, description, completed } = req.body;
   try {
-    const taskId = req.params.id;
-    if (!mongoose.Types.ObjectId.isValid(taskId)) {
-      return res.status(400).json({
-        errors: [{ msg: "Invalid task ID" }],
-      });
-    }
-
-    const task = await Task.findOne({ _id: taskId, user: req.user.id });
-    if (!task) {
-      return res.status(404).json({
-        errors: [{ msg: "Task not found" }],
-      });
-    }
-    await task.deleteOne();
-    return res.json({ msg: "Task deleted successfully" });
+    const task = new Task({ title, description, completed, user: req.user.id });
+    await task.save();
+    return res.status(201).json(task);
   } catch (err) {
     return res.status(500).json({ errors: [{ msg: "Server Error" }] });
   }
@@ -270,6 +210,66 @@ router.put("/:id", auth, async (req, res) => {
 
     await task.save();
     return res.json(task);
+  } catch (err) {
+    return res.status(500).json({ errors: [{ msg: "Server Error" }] });
+  }
+});
+
+/**
+ * @swagger
+ * /tasks/{id}:
+ *   delete:
+ *     summary: Delete task by ID
+ *     description: Deletes a task belonging to the authenticated user.
+ *     tags:
+ *       - Tasks
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Task ID
+ *     responses:
+ *       200:
+ *         description: Task deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 msg:
+ *                   type: string
+ *                   example: Task deleted successfully
+ *       400:
+ *         description: Invalid task ID
+ *       401:
+ *         description: Missing or invalid token
+ *       404:
+ *         description: Task not found
+ *       500:
+ *         description: Server Error
+ */
+
+router.delete("/:id", auth, async (req, res) => {
+  try {
+    const taskId = req.params.id;
+    if (!mongoose.Types.ObjectId.isValid(taskId)) {
+      return res.status(400).json({
+        errors: [{ msg: "Invalid task ID" }],
+      });
+    }
+
+    const task = await Task.findOne({ _id: taskId, user: req.user.id });
+    if (!task) {
+      return res.status(404).json({
+        errors: [{ msg: "Task not found" }],
+      });
+    }
+    await task.deleteOne();
+    return res.json({ msg: "Task deleted successfully" });
   } catch (err) {
     return res.status(500).json({ errors: [{ msg: "Server Error" }] });
   }

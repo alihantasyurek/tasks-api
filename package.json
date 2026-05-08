@@ -4,8 +4,9 @@
   "description": "JWT-based Task Management REST API with CRUD operations and Swagger documentation.",
   "main": "server.js",
   "scripts": {
-    "start": "node server",
-    "server": "nodemon server"
+    "start": "npm run --silent env-setup; node server",
+    "server": "nodemon server",
+    "env-setup": "cp .env.example .env"
   },
   "repository": {
     "type": "git",
