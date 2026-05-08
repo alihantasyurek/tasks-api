@@ -1,10 +1,12 @@
 require("dotenv").config();
 const express = require("express");
 const setupSwagger = require("./config/swagger.js");
+const connectDB = require("./config/db.js");
 
+connectDB();
 const app = express();
-setupSwagger(app);
 app.use(express.json());
+setupSwagger(app);
 
 app.use("/auth", require("./routes/auth.js"));
 
