@@ -33,7 +33,7 @@ const auth = require("../middleware/auth.js");
 router.get("/", auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-password");
-    res.json(user);
+    return res.json(user);
   } catch (err) {
     return res.status(500).json({ errors: [{ msg: "Server Error" }] });
   }
@@ -132,7 +132,6 @@ router.post("/login", credentialsValidation(), async (req, res) => {
     if (!user) {
       return res.status(401).json({ errors: [{ msg: "Invalid Credentials" }] });
     }
-    //check password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(401).json({ errors: [{ msg: "Invalid Credentials" }] });

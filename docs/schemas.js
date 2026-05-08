@@ -33,4 +33,40 @@
  *           type: string
  *           format: email
  *           example: user@example.com
+ *     Task:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *           example: 681c8f2e9b1f2a3c4d5e6f7g
+ *         title:
+ *           type: string
+ *           example: Finish Swagger docs
+ *         description:
+ *           type: string
+ *           example: Add documentation for task routes
+ *         completed:
+ *           type: boolean
+ *           example: false
+ *         user:
+ *           type: string
+ *           example: 69fe1634c6261d1ab7f569ac
+ *     UpdatedTask:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *           example: 681c8f2e9b1f2a3c4d5e6f7g
+ *         title:
+ *           type: string
+ *           example: Finish Swagger docs
+ *         description:
+ *           type: string
+ *           example: Add documentation for EVERY route
+ *         completed:
+ *           type: boolean
+ *           example: true
+ *         user:
+ *           type: string
+ *           example: 69fe1634c6261d1ab7f569ac
  */

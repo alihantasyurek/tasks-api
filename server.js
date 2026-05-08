@@ -9,6 +9,7 @@ app.use(express.json());
 setupSwagger(app);
 
 app.use("/auth", require("./routes/auth.js"));
+app.use("/tasks", require("./routes/tasks.js"));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
