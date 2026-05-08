@@ -9,8 +9,17 @@ const options = {
       version: "1.0.0",
       description: "A REST API for managing tasks.",
     },
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
+    },
   },
-  apis: ["server.js"],
+  apis: ["routes/*.js", "docs/*.js"],
 };
 
 const openapiSpecification = swaggerJsdoc(options);
