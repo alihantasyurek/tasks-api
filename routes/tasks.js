@@ -105,6 +105,24 @@ router.get("/:id", auth, async (req, res) => {
  *       - Tasks
  *     security:
  *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - title
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 example: Finish Swagger docs
+ *               description:
+ *                 type: string
+ *                 example: Add documentation for task routes
+ *               completed:
+ *                 type: boolean
+ *                 example: false
  *     responses:
  *       201:
  *         description: Task created successfully
